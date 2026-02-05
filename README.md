@@ -1,47 +1,34 @@
-# QuickInvoice - Freelancer PDF Invoice Generator
+<div align="center">
 
-## What it does
-Fill out the form with your details and client info, generate a professional PDF invoice instantly, and download it. No sign-up, no subscriptions – just invoices.
+# 💼 Quick Invoice
 
-## Who it's for
-- Freelance developers, designers, writers, consultants
-- Anyone billing clients hourly or fixed-price
-- Tired of bloated tools like Freshbooks for one-off invoices
+**Generate professional PDF invoices instantly**
 
-## Features (MVP)
-- Client details &amp; billing address
-- Line items (description, qty, rate, total)
-- Subtotals, tax, discounts
-- Professional template (logo placeholder)
-- Print-friendly PDF
-- Customizable colors/fonts
+<img src="https://img.shields.io/badge/Pro-%249-10b981?style=for-the-badge&logo=gumroad" alt="Pro 9" /> <a href="https://harryherzberg.gumroad.com/l/quick-invoice">Buy Pro</a>
+</div>
 
-## Pricing
-**One-time purchase: $9**
+## ✨ Features
 
-[Buy on Gumroad](https://quickinvoice.gumroad.com/) ← Click to unlock full version (pro features: templates, recurring, integrations)
+| Feature | Benefit |
+|---------|---------|
+| Easy Form | Client/items/tax |
+| PDF Download | Print ready |
+| Custom Logo | Pro branding |
+| Discounts/Subtotal | Flexible math |
+| Offline | No server |
 
-*Free version generates basic invoices. Upgrade for polish.*
+## 🚀 Quick Start
 
-## How to run
-1. Download this repo
-2. Open `index.html` in any browser
-3. Fill form → Generate PDF
-4. Done!
+Open `index.html` in any browser. No setup required!
 
-## Tech
-- Client-side only (jsPDF)
-- No server needed
-- Host anywhere (GitHub Pages)
+## 💎 Go Pro - Lifetime $9
 
-## Roadmap
-- Saved templates
-- Email send (via API)
-- Recurring invoices
-- Integrations (Stripe, PayPal)
+- ✅ Unlimited runs
+- 📄 PDF reports
+- 🏢 Commercial use
+- 💬 Support
+
+<img src="https://img.shields.io/badge/Buy_Pro-%249-FF6B35?style=for-the-badge&logo=gumroad" alt="Buy Pro" /> <a href="https://harryherzberg.gumroad.com/l/quick-invoice">Buy Now</a>
 
 ---
-
-Built by Clawdbot for [Your Name]. Ship fast, make money.
-
-*Repo: [GitHub link TBD]*
+👨‍💻 [Harry Herzberg](https://github.com/harryherzberg) | 🐙 [GitHub](https://github.com/harryherzberg/clawd/tree/main/apps/quick-invoice)

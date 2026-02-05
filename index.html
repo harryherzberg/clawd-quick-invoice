@@ -1,256 +1,270 @@
-&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;title&gt;QuickInvoice - Generate PDF Invoices&lt;/title&gt;
-    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js&quot;&gt;&lt;/script&gt;
-    &lt;style&gt;
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .pricing { background: #f0f8ff; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 30px; }
-        .buy-btn { background: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 18px; cursor: pointer; text-decoration: none; }
-        form { display: grid; gap: 15px; }
-        label { font-weight: bold; }
-        input, textarea, select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        .items { display: grid; gap: 10px; }
-        .item-row { display: grid; grid-template-columns: 1fr 80px 80px 100px; gap: 10px; }
-        button[type=&quot;button&quot;] { background: #007bff; color: white; padding: 12px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
-        footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666; }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;🧾 QuickInvoice&lt;/h1&gt;
-    
-    &lt;div class=&quot;pricing&quot;&gt;
-        &lt;h2&gt;Unlock Pro for $9&lt;/h2&gt;
-        &lt;p&gt;One-time. No subs. Full templates + export options.&lt;/p&gt;
-        &lt;a href=&quot;https://quickinvoice.gumroad.com/&quot; class=&quot;buy-btn&quot; target=&quot;_blank&quot;&gt;Buy Now on Gumroad&lt;/a&gt;
-        &lt;p style=&quot;font-size: 14px; margin-top: 10px;&quot;&gt;(Free version works great for basics)&lt;/p&gt;
-    &lt;/div&gt;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickInvoice - Professional PDF Invoices</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {}
+      }
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-slate-900 dark:via-gray-900 dark:to-slate-900 min-h-screen transition-colors duration-300">
+  <!-- Header -->
+  <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-2xl border-b border-orange-200 dark:border-slate-700 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center">
+        <h1 class="text-4xl sm:text-5xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 bg-clip-text text-transparent drop-shadow-lg">🧾 QuickInvoice</h1>
+        <button id="theme-toggle" class="p-3 rounded-2xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95">
+          <span class="dark:hidden">🌙</span>
+          <span class="hidden dark:inline">☀️</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main class="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8 space-y-12">
+    <!-- Pro Card -->
+    <div class="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-3xl shadow-2xl p-10 text-center hover:shadow-3xl transition-all duration-500 animate-in slide-in-from-top-4 fade-in">
+      <h2 class="text-3xl font-bold mb-6 bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Unlock Pro for $9</h2>
+      <p class="text-xl mb-8 text-slate-700 dark:text-slate-300 max-w-2xl mx-auto">One-time payment. Advanced templates, branding, multi-currency, recurring invoices & more.</p>
+      <a href="https://quickinvoice.gumroad.com/" target="_blank" class="inline-block bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-6 px-12 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl hover:-translate-y-2 transition-all duration-500">Buy Pro Now →</a>
+      <p class="mt-6 text-sm text-slate-500 dark:text-slate-400">(Free version is fully functional for basics! 🎉)</p>
+    </div>
+    <!-- Invoice Form -->
+    <div class="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-3xl shadow-2xl p-10 hover:shadow-3xl transition-all duration-500 animate-in slide-in-from-bottom-4 fade-in">
+      <form id="invoiceForm" class="space-y-8">
+        <!-- Business Info -->
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <label class="block text-xl font-bold mb-4 text-slate-900 dark:text-white">🏢 Your Business</label>
+            <input type="text" id="bizName" value="Your Freelance Biz" class="w-full p-6 border-2 border-slate-200 dark:border-slate-600 rounded-2xl focus:ring-4 focus:ring-orange-500/50 focus:border-orange-500 bg-white dark:bg-slate-700 text-lg shadow-xl transition-all duration-300" required>
+            <textarea id="bizAddress" rows="3" class="w-full mt-4 p-6 border-2 border-slate-200 dark:border-slate-600 rounded-2xl focus:ring-4 focus:ring-orange-500/50 focus:border-orange-500 bg-white dark:bg-slate-700 text-lg shadow-xl transition-all duration-300">123 Freelance St
+City, State 12345</textarea>
+          </div>
+          <div>
+            <label class="block text-xl font-bold mb-4 text-slate-900 dark:text-white">👥 Client Info</label>
+            <input type="text" id="clientName" value="Client Co." class="w-full p-6 border-2 border-slate-200 dark:border-slate-600 rounded-2xl focus:ring-4 focus:ring-orange-500/50 focus:border-orange-500 bg-white dark:bg-slate-700 text-lg shadow-xl transition-all duration-300" required>
+            <textarea id="clientAddress" rows="3" class="w-full mt-4 p-6 border-2 border-slate-200 dark:border-slate-600 rounded-2xl focus:ring-4 focus:ring-orange-500/50 focus:border-orange-500 bg-white dark:bg-slate-700 text-lg shadow-xl transition-all duration-300">456 Client Ave
+City, State 67890</textarea>
+          </div>
+        </div>
+        <!-- Invoice Details -->
+        <div class="grid md:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-lg font-semibold mb-3 text-slate-900 dark:text-white">📄 Invoice #</label>
+            <input type="text" id="invoiceNum" value="INV-001" class="w-full p-5 border-2 border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-400 bg-white dark:bg-slate-700 text-lg shadow-inner transition-all duration-300">
+          </div>
+          <div>
+            <label class="block text-lg font-semibold mb-3 text-slate-900 dark:text-white">📅 Invoice Date</label>
+            <input type="date" id="invoiceDate" class="w-full p-5 border-2 border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-400 bg-white dark:bg-slate-700 text-lg shadow-inner transition-all duration-300">
+          </div>
+          <div>
+            <label class="block text-lg font-semibold mb-3 text-slate-900 dark:text-white">⏰ Due Date</label>
+            <input type="date" id="dueDate" class="w-full p-5 border-2 border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-orange-400 bg-white dark:bg-slate-700 text-lg shadow-inner transition-all duration-300">
+          </div>
+        </div>
+        <!-- Line Items -->
+        <div>
+          <label class="block text-2xl font-bold mb-6 text-slate-900 dark:text-white">🛒 Line Items</label>
+          <div id="itemsContainer" class="space-y-4 mb-8"></div>
+          <button type="button" onclick="addItem()" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-4 px-8 rounded-2xl font-bold text-xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 mx-auto block">+ Add Item</button>
+        </div>
+        <!-- Totals -->
+        <div class="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 p-8 rounded-3xl border-2 border-dashed border-orange-200 dark:border-orange-800 shadow-inner">
+          <div class="grid md:grid-cols-2 gap-4 text-2xl font-bold text-right md:text-left">
+            <div class="text-lg md:text-xl text-slate-700 dark:text-slate-300">Tax Rate (%): <input type="number" id="taxRate" value="0" step="0.1" min="0" class="ml-2 w-24 p-2 border rounded-xl bg-white dark:bg-slate-700 text-lg font-bold text-right"></div>
+            <div class="text-lg md:text-xl text-slate-700 dark:text-slate-300">Discount (%): <input type="number" id="discount" value="0" step="0.1" min="0" class="ml-2 w-24 p-2 border rounded-xl bg-white dark:bg-slate-700 text-lg font-bold text-right"></div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-2 mt-8 text-3xl font-black text-right border-t-4 pt-6 border-orange-300 dark:border-orange-700">
+            <div>Subtotal: $<span id="subtotal">0.00</span></div>
+            <div class="text-orange-600 dark:text-orange-400">Tax: $<span id="tax">0.00</span></div>
+            <div class="-ml-4 text-red-600 dark:text-red-400">Discount: -$<span id="discountAmt">0.00</span></div>
+            <div class="border-t-2 pt-4 mt-2 text-4xl bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Total: $<span id="total">0.00</span></div>
+          </div>
+        </div>
+        <button type="button" onclick="generatePDF()" class="w-full bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 hover:from-emerald-600 hover:via-green-600 hover:to-emerald-700 text-white py-8 rounded-3xl font-black text-2xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all duration-700 uppercase tracking-wider animate-pulse hover:animate-bounce">📄 Generate & Download PDF Invoice</button>
+      </form>
+    </div>
+  </main>
+  <script>
+    // Theme Toggle (same as above)
+    const htmlEl = document.documentElement;
+    const toggleBtn = document.getElementById('theme-toggle');
+    const setTheme = (isDark) => {
+      htmlEl.classList.toggle('dark', isDark);
+      toggleBtn.querySelectorAll('span')[0].classList.toggle('hidden', !isDark);
+      toggleBtn.querySelectorAll('span')[1].classList.toggle('hidden', isDark);
+    };
+    if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setTheme(true);
+    } else {
+      setTheme(false);
+    }
+    toggleBtn.onclick = () => {
+      const isDark = htmlEl.classList.contains('dark');
+      setTheme(!isDark);
+      localStorage.theme = !isDark ? 'dark' : 'light';
+    };
 
-    &lt;form id=&quot;invoiceForm&quot;&gt;
-        &lt;div&gt;
-            &lt;label&gt;Your Business Name:&lt;/label&gt;
-            &lt;input type=&quot;text&quot; id=&quot;bizName&quot; value=&quot;Your Freelance Biz&quot; required&gt;
-        &lt;/div&gt;
-        &lt;div&gt;
-            &lt;label&gt;Your Address:&lt;/label&gt;
-            &lt;textarea id=&quot;bizAddress&quot; rows=&quot;2&quot;&gt;123 Freelance St&lt;br&gt;City, State 12345&lt;/textarea&gt;
-        &lt;/div&gt;
-        &lt;div&gt;
-            &lt;label&gt;Client Name:&lt;/label&gt;
-            &lt;input type=&quot;text&quot; id=&quot;clientName&quot; value=&quot;Client Co.&quot; required&gt;
-        &lt;/div&gt;
-        &lt;div&gt;
-            &lt;label&gt;Client Address:&lt;/label&gt;
-            &lt;textarea id=&quot;clientAddress&quot; rows=&quot;2&quot;&gt;456 Client Ave&lt;br&gt;City, State 67890&lt;/textarea&gt;
-        &lt;/div&gt;
-        &lt;div style=&quot;display: grid; grid-template-columns: 1fr 1fr; gap: 15px;&quot;&gt;
-            &lt;div&gt;
-                &lt;label&gt;Invoice #:&lt;/label&gt;
-                &lt;input type=&quot;text&quot; id=&quot;invoiceNum&quot; value=&quot;INV-001&quot;&gt;
-            &lt;/div&gt;
-            &lt;div&gt;
-                &lt;label&gt;Invoice Date:&lt;/label&gt;
-                &lt;input type=&quot;date&quot; id=&quot;invoiceDate&quot;&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div&gt;
-            &lt;label&gt;Due Date:&lt;/label&gt;
-            &lt;input type=&quot;date&quot; id=&quot;dueDate&quot;&gt;
-        &lt;/div&gt;
+    // Init dates
+    document.getElementById('invoiceDate').valueAsDate = new Date();
+    document.getElementById('dueDate').valueAsDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-        &lt;h3&gt;Line Items&lt;/h3&gt;
-        &lt;div id=&quot;itemsContainer&quot;&gt;
-            &lt;div class=&quot;item-row&quot;&gt;
-                &lt;input type=&quot;text&quot; placeholder=&quot;Description&quot; class=&quot;desc&quot;&gt;
-                &lt;input type=&quot;number&quot; placeholder=&quot;Qty&quot; class=&quot;qty&quot; value=&quot;1&quot; min=&quot;1&quot;&gt;
-                &lt;input type=&quot;number&quot; placeholder=&quot;Rate&quot; class=&quot;rate&quot; step=&quot;0.01&quot;&gt;
-                &lt;span class=&quot;item-total&quot;&gt;$0.00&lt;/span&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;button type=&quot;button&quot; onclick=&quot;addItem()&quot;&gt;+ Add Item&lt;/button&gt;
+    // Items
+    let itemCount = 1;
+    const itemsContainer = document.getElementById('itemsContainer');
+    function createItemRow() {
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-600 hover:border-orange-400 transition-all duration-300 shadow-inner hover:shadow-md';
+      row.innerHTML = `
+        <input type="text" placeholder="Description of service/item" class="desc p-4 border rounded-xl focus:ring-2 focus:ring-orange-400 bg-white dark:bg-slate-700 text-lg font-medium col-span-2 md:col-span-2">
+        <input type="number" placeholder="Qty" class="qty p-4 border rounded-xl focus:ring-2 focus:ring-orange-400 bg-white dark:bg-slate-700 text-lg font-bold text-right" value="1" min="1">
+        <input type="number" placeholder="Rate $" class="rate p-4 border rounded-xl focus:ring-2 focus:ring-orange-400 bg-white dark:bg-slate-700 text-lg font-bold text-right" step="0.01">
+        <span class="item-total text-2xl font-black text-orange-600 dark:text-orange-400 text-right self-center">$0.00</span>
+      `;
+      row.querySelectorAll('input').forEach(input => input.addEventListener('input', updateTotals));
+      itemsContainer.appendChild(row);
+      updateTotals();
+    }
+    createItemRow(); // Initial row
 
-        &lt;div style=&quot;display: grid; grid-template-columns: 1fr auto; gap: 15px; margin-top: 20px;&quot;&gt;
-            &lt;div&gt;
-                &lt;label&gt;Tax Rate (%):&lt;/label&gt;
-                &lt;input type=&quot;number&quot; id=&quot;taxRate&quot; value=&quot;0&quot; step=&quot;0.1&quot; min=&quot;0&quot;&gt;
-            &lt;/div&gt;
-            &lt;div&gt;
-                &lt;label&gt;Discount (%):&lt;/label&gt;
-                &lt;input type=&quot;number&quot; id=&quot;discount&quot; value=&quot;0&quot; step=&quot;0.1&quot; min=&quot;0&quot;&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div style=&quot;text-align: right; font-size: 18px; font-weight: bold; margin-top: 20px;&quot;&gt;
-            &lt;div&gt;Subtotal: &lt;span id=&quot;subtotal&quot;&gt;$0.00&lt;/span&gt;&lt;/div&gt;
-            &lt;div&gt;Tax: &lt;span id=&quot;tax&quot;&gt;$0.00&lt;/span&gt;&lt;/div&gt;
-            &lt;div&gt;Discount: &lt;span id=&quot;discountAmt&quot;&gt;$0.00&lt;/span&gt;&lt;/div&gt;
-            &lt;div style=&quot;border-top: 2px solid #000; padding-top: 10px;&quot;&gt;Total: &lt;span id=&quot;total&quot;&gt;$0.00&lt;/span&gt;&lt;/div&gt;
-        &lt;/div&gt;
+    function addItem() {
+      itemCount++;
+      createItemRow();
+    }
 
-        &lt;button type=&quot;button&quot; onclick=&quot;generatePDF()&quot; style=&quot;width: 100%; margin-top: 20px;&quot;&gt;📄 Generate &amp; Download PDF&lt;/button&gt;
-    &lt;/form&gt;
+    function updateTotals() {
+      let subtotal = 0;
+      document.querySelectorAll('#itemsContainer > div').forEach(row => {
+        const qty = parseFloat(row.querySelector('.qty').value) || 0;
+        const rate = parseFloat(row.querySelector('.rate').value) || 0;
+        const total = qty * rate;
+        row.querySelector('.item-total').textContent = `$${total.toFixed(2)}`;
+        subtotal += total;
+      });
+      const taxRate = parseFloat(document.getElementById('taxRate').value) / 100 || 0;
+      const tax = subtotal * taxRate;
+      document.getElementById('tax').textContent = tax.toFixed(2);
+      const discountRate = parseFloat(document.getElementById('discount').value) / 100 || 0;
+      const discountAmt = subtotal * discountRate;
+      document.getElementById('discountAmt').textContent = discountAmt.toFixed(2);
+      const total = subtotal + tax - discountAmt;
+      document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+      document.getElementById('total').textContent = total.toFixed(2);
+      document.getElementById('taxRate').addEventListener('input', updateTotals);
+      document.getElementById('discount').addEventListener('input', updateTotals);
+    }
 
-    &lt;footer&gt;
-        &lt;p&gt;Powered by QuickInvoice | &lt;a href=&quot;https://quickinvoice.gumroad.com/&quot; target=&quot;_blank&quot;&gt;Upgrade to Pro&lt;/a&gt;&lt;/p&gt;
-    &lt;/footer&gt;
+    // PDF Generation (enhanced from original)
+    async function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const bizName = document.getElementById('bizName').value;
+      const bizAddress = document.getElementById('bizAddress').value.replace(/\n/g, '\n');
+      const clientName = document.getElementById('clientName').value;
+      const clientAddress = document.getElementById('clientAddress').value.replace(/\n/g, '\n');
+      const invoiceNum = document.getElementById('invoiceNum').value;
+      const invoiceDate = document.getElementById('invoiceDate').value;
+      const dueDate = document.getElementById('dueDate').value;
 
-    &lt;script&gt;
-        // Set today dates
-        document.getElementById(&#39;invoiceDate&#39;).valueAsDate = new Date();
-        const dueDateInput = document.getElementById(&#39;dueDate&#39;);
-        dueDateInput.valueAsDate = new Date(Date.now() + 30*24*60*60*1000); // 30 days
+      let y = 20;
+      doc.setFontSize(24);
+      doc.setFont('helvetica', 'bold');
+      doc.text(bizName.toUpperCase(), 20, y);
+      y += 15;
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      const lines = doc.splitTextToSize(bizAddress, 170);
+      doc.text(lines, 20, y);
+      y += lines.length * 5 + 25;
 
-        let itemCount = 1;
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`INVOICE #${invoiceNum}`, 20, y);
+      y += 10;
+      doc.text(`Date: ${invoiceDate}`, 20, y);
+      y += 8;
+      doc.text(`Due: ${dueDate}`, 20, y);
+      y += 20;
 
-        function addItem() {
-            itemCount++;
-            const container = document.getElementById(&#39;itemsContainer&#39;);
-            const row = document.createElement(&#39;div&#39;);
-            row.className = &#39;item-row&#39;;
-            row.innerHTML = `
-                &lt;input type=&quot;text&quot; placeholder=&quot;Description&quot; class=&quot;desc&quot;&gt;
-                &lt;input type=&quot;number&quot; placeholder=&quot;Qty&quot; class=&quot;qty&quot; value=&quot;1&quot; min=&quot;1&quot;&gt;
-                &lt;input type=&quot;number&quot; placeholder=&quot;Rate&quot; class=&quot;rate&quot; step=&quot;0.01&quot;&gt;
-                &lt;span class=&quot;item-total&quot;&gt;$0.00&lt;/span&gt;
-            `;
-            container.appendChild(row);
-            updateTotals();
+      doc.text('Bill To:', 20, y);
+      y += 8;
+      doc.text(clientName, 20, y);
+      y += 8;
+      const clientLines = doc.splitTextToSize(clientAddress, 170);
+      doc.text(clientLines, 20, y);
+      y += clientLines.length * 5 + 20;
+
+      // Table
+      doc.setFontSize(12);
+      doc.text('Description', 20, y);
+      doc.text('Qty', 105, y);
+      doc.text('Rate', 135, y);
+      doc.text('Total', 175, y);
+      y += 8;
+      doc.line(20, y, 195, y);
+      y += 5;
+
+      let subtotal = 0;
+      document.querySelectorAll('#itemsContainer > div').forEach(row => {
+        const desc = row.querySelector('.desc').value;
+        if (desc) {
+          const qty = parseFloat(row.querySelector('.qty').value) || 0;
+          const rate = parseFloat(row.querySelector('.rate').value) || 0;
+          const total = qty * rate;
+          subtotal += total;
+          const descLines = doc.splitTextToSize(desc, 80);
+          doc.text(descLines, 20, y);
+          doc.text(qty.toFixed(0), 110, y);
+          doc.text(`$${rate.toFixed(2)}`, 140, y);
+          doc.text(`$${total.toFixed(2)}`, 180, y);
+          y += Math.max(1, descLines.length) * 6;
         }
+      });
 
-        function updateItemTotals(row) {
-            const desc = row.querySelector(&#39;.desc&#39;);
-            const qty = parseFloat(row.querySelector(&#39;.qty&#39;).value) || 0;
-            const rate = parseFloat(row.querySelector(&#39;.rate&#39;).value) || 0;
-            const total = qty * rate;
-            row.querySelector(&#39;.item-total&#39;).textContent = &#39;$&#39; + total.toFixed(2);
-            updateTotals();
-        }
+      y += 5;
+      doc.line(20, y, 195, y);
+      y += 10;
+      doc.text(`Subtotal: $${subtotal.toFixed(2)}`, 140, y);
+      y += 8;
+      const taxRate = parseFloat(document.getElementById('taxRate').value) / 100 || 0;
+      const tax = subtotal * taxRate;
+      doc.text(`Tax: $${tax.toFixed(2)}`, 140, y);
+      y += 8;
+      const discRate = parseFloat(document.getElementById('discount').value) / 100 || 0;
+      const disc = subtotal * discRate;
+      doc.text(`Discount: -$${disc.toFixed(2)}`, 140, y);
+      y += 15;
+      const grandTotal = subtotal + tax - disc;
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`TOTAL: $${grandTotal.toFixed(2)}`, 140, y);
 
-        function updateTotals() {
-            let subtotal = 0;
-            document.querySelectorAll(&#39;.item-row&#39;).forEach(row =&gt; {
-                const qty = parseFloat(row.querySelector(&#39;.qty&#39;).value) || 0;
-                const rate = parseFloat(row.querySelector(&#39;.rate&#39;).value) || 0;
-                subtotal += qty * rate;
-            });
-            document.getElementById(&#39;subtotal&#39;).textContent = &#39;$&#39; + subtotal.toFixed(2);
+      y = 270;
+      doc.setFontSize(14);
+      doc.text('Thank you for your business!', 20, y);
 
-            const taxRate = parseFloat(document.getElementById(&#39;taxRate&#39;).value) / 100 || 0;
-            const tax = subtotal * taxRate;
-            document.getElementById(&#39;tax&#39;).textContent = &#39;$&#39; + tax.toFixed(2);
+      doc.save(`invoice_${invoiceNum || '001'}.pdf`);
+      // Feedback
+      const btn = event.target;
+      btn.textContent = '✅ PDF Downloaded!';
+      btn.classList.add('animate-bounce');
+      setTimeout(() => {
+        btn.textContent = '📄 Generate & Download PDF Invoice';
+        btn.classList.remove('animate-bounce');
+      }, 2000);
+    }
 
-            const discountRate = parseFloat(document.getElementById(&#39;discount&#39;).value) / 100 || 0;
-            const discountAmt = subtotal * discountRate;
-            document.getElementById(&#39;discountAmt&#39;).textContent = &#39;- $&#39; + discountAmt.toFixed(2);
-
-            const total = subtotal + tax - discountAmt;
-            document.getElementById(&#39;total&#39;).textContent = &#39;$&#39; + total.toFixed(2);
-        }
-
-        // Live updates
-        document.addEventListener(&#39;input&#39;, function(e) {
-            if (e.target.classList.contains(&#39;qty&#39;) || e.target.classList.contains(&#39;rate&#39;) || 
-                e.target.id === &#39;taxRate&#39; || e.target.id === &#39;discount&#39;) {
-                const row = e.target.closest(&#39;.item-row&#39;);
-                if (row) {
-                    updateItemTotals(row);
-                } else {
-                    updateTotals();
-                }
-            }
-        });
-
-        async function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Collect data
-            const bizName = document.getElementById(&#39;bizName&#39;).value;
-            const bizAddress = document.getElementById(&#39;bizAddress&#39;).value.replace(/&lt;br&gt;/g, &#39;\n&#39;);
-            const clientName = document.getElementById(&#39;clientName&#39;).value;
-            const clientAddress = document.getElementById(&#39;clientAddress&#39;).value.replace(/&lt;br&gt;/g, &#39;\n&#39;);
-            const invoiceNum = document.getElementById(&#39;invoiceNum&#39;).value;
-            const invoiceDate = document.getElementById(&#39;invoiceDate&#39;).value;
-            const dueDate = document.getElementById(&#39;dueDate&#39;).value;
-
-            let y = 20;
-            doc.setFontSize(20);
-            doc.text(bizName, 20, y);
-            y += 10;
-            doc.setFontSize(12);
-            doc.text(bizAddress, 20, y, { maxWidth: 80 });
-            y += 30;
-
-            doc.text(`INVOICE #${invoiceNum}`, 20, y);
-            y += 8;
-            doc.text(`Date: ${invoiceDate}`, 20, y);
-            y += 8;
-            doc.text(`Due: ${dueDate}`, 20, y);
-            y += 20;
-
-            // Bill to
-            doc.text(&#39;Bill To:&#39;, 20, y);
-            y += 8;
-            doc.text(clientName, 20, y);
-            y += 8;
-            doc.text(clientAddress, 20, y, { maxWidth: 80 });
-            y += 25;
-
-            // Table header
-            doc.text(&#39;Description&#39;, 20, y);
-            doc.text(&#39;Qty&#39;, 100, y);
-            doc.text(&#39;Rate&#39;, 130, y);
-            doc.text(&#39;Total&#39;, 170, y);
-            y += 10;
-            doc.line(20, y, 190, y); // line
-            y += 5;
-
-            // Items
-            let subtotal = 0;
-            document.querySelectorAll(&#39;.item-row&#39;).forEach((row, index) =&gt; {
-                const desc = row.querySelector(&#39;.desc&#39;).value;
-                const qty = parseFloat(row.querySelector(&#39;.qty&#39;).value) || 0;
-                const rate = parseFloat(row.querySelector(&#39;.rate&#39;).value) || 0;
-                const total = qty * rate;
-                subtotal += total;
-
-                if (desc) {
-                    doc.text(desc.substring(0, 40), 20, y, { maxWidth: 75 });
-                    doc.text(qty.toFixed(0), 105, y);
-                    doc.text(&#39;$&#39; + rate.toFixed(2), 135, y);
-                    doc.text(&#39;$&#39; + total.toFixed(2), 175, y);
-                    y += 8;
-                }
-            });
-
-            // Totals
-            y += 5;
-            doc.line(20, y, 190, y);
-            y += 10;
-            doc.text(&#39;Subtotal:          $&#39; + subtotal.toFixed(2), 140, y);
-            y += 8;
-            const taxRate = parseFloat(document.getElementById(&#39;taxRate&#39;).value) / 100 || 0;
-            const tax = subtotal * taxRate;
-            doc.text(&#39;Tax:               $&#39; + tax.toFixed(2), 140, y);
-            y += 8;
-            const discRate = parseFloat(document.getElementById(&#39;discount&#39;).value) / 100 || 0;
-            const disc = subtotal * discRate;
-            doc.text(&#39;Discount:         -$&#39; + disc.toFixed(2), 140, y);
-            y += 15;
-            const grandTotal = subtotal + tax - disc;
-            doc.setFontSize(16);
-            doc.setFont(&#39;helvetica&#39;, &#39;bold&#39;);
-            doc.text(&#39;TOTAL:            $&#39; + grandTotal.toFixed(2), 140, y);
-
-            // Thank you
-            y = 270;
-            doc.setFontSize(12);
-            doc.setFont(&#39;helvetica&#39;, &#39;normal&#39;);
-            doc.text(&#39;Thank you for your business!&#39;, 20, y);
-
-            doc.save(`invoice_${invoiceNum}.pdf`);
-        }
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+    // Event listeners for live updates
+    document.addEventListener('input', e => {
+      if (e.target.matches('#taxRate, #discount, .qty, .rate')) updateTotals();
+    });
+  </script>
+</body>
+</html>
